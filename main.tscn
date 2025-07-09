@@ -1,0 +1,53 @@
+[gd_scene load_steps=7 format=3 uid="uid://ewhjkrcg0ar2"]
+
+[ext_resource type="Script" uid="uid://b5q71k7yf8kq8" path="res://main.gd" id="1_h2yge"]
+[ext_resource type="PackedScene" uid="uid://bwv68lyq1otpg" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://cxlakk2awtoct" path="res://mob.tscn" id="2_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dx0770caxdlpb" path="res://hud.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cx6gbssn05vqf" path="res://level1.tscn" id="5_lquwl"]
+
+[sub_resource type="Curve2D" id="Curve2D_lquwl"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 28, 622, 0, 0, 0, 0, 1179, 612, 0, 0, 0, 0, 1179, -31, 0, 0, 0, 0, 24, -33, 0, 0, 0, 0, 33, 614)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_h2yge")
+mob_scene = ExtResource("2_1bvp3")
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+position = Vector2(30, 32)
+scale = Vector2(4.08, 4.08)
+collision_mask = 30
+
+[node name="mobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="startTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="startPosition" type="Marker2D" parent="."]
+position = Vector2(344, 299)
+
+[node name="mobPath" type="Path2D" parent="."]
+position = Vector2(-27, 35)
+curve = SubResource("Curve2D_lquwl")
+
+[node name="mobSpawnLocation" type="PathFollow2D" parent="mobPath"]
+position = Vector2(28, 622)
+rotation = -0.00868788
+
+[node name="HUD" parent="." instance=ExtResource("3_h2yge")]
+
+[node name="Level" parent="." instance=ExtResource("5_lquwl")]
+position = Vector2(261, 3)
+scale = Vector2(2.56, 2.56)
+
+[connection signal="eat" from="Player" to="." method="_on_player_eat"]
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="step_portal" from="Player" to="." method="_on_player_step_portal"]
+[connection signal="timeout" from="mobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="timeout" from="startTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]
