@@ -153,9 +153,7 @@ metadata/_edit_group_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_s5nov")
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2.76, 2.76)
 sprite_frames = SubResource("SpriteFrames_7ulmv")
-animation = &"pinky-up"
+animation = &"blinky-up"

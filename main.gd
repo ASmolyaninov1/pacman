@@ -8,7 +8,6 @@ func _ready():
 	pass
 
 func game_over():
-	$mobTimer.stop()
 	$HUD.show_game_over()
 
 func new_game():
@@ -17,34 +16,17 @@ func new_game():
 	$Player.start($startPosition.position)
 	$startTimer.start()
 	$HUD.update_score(score)
+	spawn_mob()
 
-func _on_start_timer_timeout():
-	$mobTimer.start()
-
-func _on_mob_timer_timeout():
+func spawn_mob():
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
 
 	# Choose a random location on Path2D.
-	var mob_spawn_location = $mobPath/mobSpawnLocation
-	mob_spawn_location.progress_ratio = randf()
-
-	# Set the mob's position to the random location.
-	mob.position = mob_spawn_location.position
-
-	# Set the mob's direction perpendicular to the path direction.
-	var direction = mob_spawn_location.rotation - PI / 2
-
-	# Add some randomness to the direction.
-	direction += randf_range(-PI / 4, PI / 4)
-	mob.rotation = direction
-
-	# Choose the velocity for the mob.
-	var velocity = Vector2(randf_range(150.0, 250.0), 0.0)
-	mob.linear_velocity = velocity.rotated(direction)
-
+	var mob_spawn_location = $mobStartPosition.position
+	mob.global_position = mob_spawn_location
 	# Spawn the mob by adding it to the Main scene.
-	# add_child(mob)
+	add_child(mob)
 
 func _on_hud_start_game():
 	new_game()
@@ -63,7 +45,6 @@ func _on_player_step_portal(cell: Vector2i) -> void:
 	for c in cells:
 		var tile_data = $Level/TileMapLayer.get_cell_tile_data(c)
 		if tile_data.get_custom_data('is_portal') and cell != c:
-			print(c)
 			exit_portal_cell = c
 			break
 	var exit_portal_position = $Level/TileMapLayer.map_to_local(exit_portal_cell)
