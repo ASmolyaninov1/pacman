@@ -36,30 +36,25 @@ func _physics_process(delta):
 func calculate_next_direction() -> Vector2:
 	var player_position = player.global_position as Vector2
 	var mob_position = global_position
-	var default_directions = [Vector2.RIGHT, Vector2.LEFT, Vector2.UP, Vector2.DOWN]
-	var direction = Vector2.ZERO
-	for dir in default_directions:
-		var is_valid_direction = discret_move.can_move(dir)
-		if not is_valid_direction:
-			continue
 
-		var angle_to_player = mob_position.angle_to(player_position)
-		var angle_to_dir = mob_position.angle_to(dir)
-		
-		if (direction == Vector2.ZERO and is_valid_direction):
-			direction = dir
-		elif((angle_to_player - angle_to_dir) < (mob_position.angle_to(direction) - angle_to_dir) and is_valid_direction):
-			direction = dir
+	var path = NavigationServer2D.map_get_path(
+		get_world_2d().navigation_map,
+		mob_position,
+		player_position,
+		false	
+	)
 
-	if (direction == Vector2.RIGHT):
+	var d = (path[1] - mob_position).normalized()
+
+	if (d == Vector2.RIGHT):
 		print("RIGHT")
-	elif (direction == Vector2.LEFT):
+	elif (d == Vector2.LEFT):
 		print("LEFT")
-	elif (direction == Vector2.UP):
+	elif (d == Vector2.UP):
 		print("UP")
-	elif (direction == Vector2.DOWN):
+	elif (d == Vector2.DOWN):
 		print("DOWN")
-	return direction
+	return d
 			
 
 	

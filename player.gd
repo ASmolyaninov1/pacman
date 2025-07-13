@@ -4,6 +4,7 @@ var max_tick_time: int = 400
 var discret_move = preload("res://discret_move.gd").new()
 var next_direction: Vector2 = Vector2.ZERO  # Направление движения
 var tilemap_layer: TileMapLayer = null  # Ссылка на TileMapLayer
+var road_tile_coords = Vector2i(37, 2)
 
 signal hit
 signal eat
@@ -53,13 +54,13 @@ func get_input_direction() -> Vector2:
 
 func check_tile_metadata(cell: Vector2i):
 	var tile_data = tilemap_layer.get_cell_tile_data(cell)
-
 	if tile_data:
 		if tile_data.get_custom_data('is_point'):
 			emit_signal("eat", tile_data)
 			# Удаляем точку и обновляем счет
-			tilemap_layer.set_cell(cell)
+			tilemap_layer.set_cell(cell, tilemap_layer.tile_set.get_source_id(0), road_tile_coords)
 		elif tile_data.get_custom_data('is_portal'):
+			print('porta')
 			emit_signal('step_portal', cell)
 
 func play_animation(direction: Vector2):

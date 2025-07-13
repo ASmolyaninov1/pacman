@@ -31,7 +31,6 @@ func set_position(new_position: Vector2) -> Vector2:
 	return position
 
 func get_new_position() -> Vector2:
-	print(can_move(next_direction))
 	if is_at_cell_center() and can_move(next_direction):
 		current_direction = next_direction
 		# Если можем, обновляем целевую позицию
