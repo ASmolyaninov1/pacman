@@ -74,3 +74,7 @@ func update_target_position():
 		var current_cell = tilemap_layer.local_to_map(tilemap_layer.to_local(position))
 		var next_cell = current_cell + Vector2i(current_direction)
 		target_position = tilemap_layer.to_global(tilemap_layer.map_to_local(next_cell))
+
+func update_global_position(new_position: Vector2) -> void:
+	# Обновляем позицию в глобальных координатах
+	position = new_position

@@ -40,6 +40,7 @@ func _on_player_eat(tile: TileData) -> void:
 		$HUD.update_score(score)
 
 func _on_player_step_portal(cell: Vector2i) -> void:
+	print("portal")
 	var cells = $Level/TileMapLayer.get_used_cells()
 	var exit_portal_cell = Vector2i.ZERO
 	for c in cells:

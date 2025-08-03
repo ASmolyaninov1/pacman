@@ -46,14 +46,6 @@ func calculate_next_direction() -> Vector2:
 
 	var d = (path[1] - mob_position).normalized()
 
-	if (d == Vector2.RIGHT):
-		print("RIGHT")
-	elif (d == Vector2.LEFT):
-		print("LEFT")
-	elif (d == Vector2.UP):
-		print("UP")
-	elif (d == Vector2.DOWN):
-		print("DOWN")
 	return d
 			
 

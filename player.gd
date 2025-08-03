@@ -5,6 +5,7 @@ var discret_move = preload("res://discret_move.gd").new()
 var next_direction: Vector2 = Vector2.ZERO  # Направление движения
 var tilemap_layer: TileMapLayer = null  # Ссылка на TileMapLayer
 var road_tile_coords = Vector2i(37, 2)
+var is_teleporting: bool = false
 
 signal hit
 signal eat
@@ -60,8 +61,12 @@ func check_tile_metadata(cell: Vector2i):
 			# Удаляем точку и обновляем счет
 			tilemap_layer.set_cell(cell, tilemap_layer.tile_set.get_source_id(0), road_tile_coords)
 		elif tile_data.get_custom_data('is_portal'):
-			print('porta')
-			emit_signal('step_portal', cell)
+			if not is_teleporting:
+				is_teleporting = true
+				emit_signal('step_portal', cell)
+				discret_move.update_global_position(global_position)
+		else:
+			is_teleporting = false  # Сбрасываем флаг, если не портал
 
 func play_animation(direction: Vector2):
 	if (direction == Vector2.RIGHT):
