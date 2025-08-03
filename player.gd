@@ -6,6 +6,7 @@ var next_direction: Vector2 = Vector2.ZERO  # Направление движе�
 var tilemap_layer: TileMapLayer = null  # Ссылка на TileMapLayer
 var road_tile_coords = Vector2i(37, 2)
 var is_teleporting: bool = false
+var is_freeze: bool = false  # Флаг заморозки игрока
 
 signal hit
 signal eat
@@ -24,6 +25,8 @@ func _ready():
 	discret_move.init(global_position, tilemap_layer)
 
 func _physics_process(delta):
+	if is_freeze:
+		return  # Прерываем выполнение, если игрок заморожен
 	
 	# Получаем ввод для нового направления
 	var input_direction = get_input_direction()
@@ -59,6 +62,7 @@ func check_tile_metadata(cell: Vector2i):
 		if tile_data.get_custom_data('is_point'):
 			emit_signal("eat", tile_data)
 			# Удаляем точку и обновляем счет
+			
 			tilemap_layer.set_cell(cell, tilemap_layer.tile_set.get_source_id(0), road_tile_coords)
 		elif tile_data.get_custom_data('is_portal'):
 			if not is_teleporting:
@@ -79,3 +83,15 @@ func play_animation(direction: Vector2):
 		$AnimatedSprite2D.play("pacman-down")
 	else:
 		$AnimatedSprite2D.stop()  # Останавливаем анимацию, если нет движения
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if (body is RigidBody2D):
+		emit_signal("hit")
+
+func freeze():
+	is_freeze = true
+
+func unfreeze():
+	is_freeze = false
+	

@@ -32,9 +32,10 @@ position = Vector2(261, 3)
 scale = Vector2(2.56, 2.56)
 
 [node name="mobStartPosition" type="Marker2D" parent="."]
-position = Vector2(700, 302)
+position = Vector2(587, 299)
 
 [connection signal="eat" from="Player" to="." method="_on_player_eat"]
+[connection signal="hit" from="Player" to="." method="_on_player_hit"]
 [connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="step_portal" from="Player" to="." method="_on_player_step_portal"]
 [connection signal="timeout" from="mobTimer" to="." method="_on_mob_timer_timeout"]

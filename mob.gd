@@ -38,10 +38,10 @@ func calculate_next_direction() -> Vector2:
 	var mob_position = global_position
 
 	var path = NavigationServer2D.map_get_path(
-		get_world_2d().navigation_map,
+		tilemap_layer.get_navigation_map(),
 		mob_position,
 		player_position,
-		false	
+		false
 	)
 
 	var d = (path[1] - mob_position).normalized()

@@ -2,20 +2,31 @@ extends Node
 
 @export var mob_scene: PackedScene
 var score
+var enemies = []
 
 func _ready():
 	$Player.hide();
 	pass
 
 func game_over():
+	$Player.freeze();
+	$Player.hide();
 	$HUD.show_game_over()
+	for mob in enemies:
+		mob.queue_free()  # Удаляем всех мобов
+	enemies.clear()
 
 func new_game():
+	get_node("Level").reset()  # Сбрасываем уровень  # Добавляем игрока в сцену
+	await get_tree().process_frame  # Ждем окончания текущего кадра
+	$Player.unfreeze()
+	$Player.global_position = $startPosition.position
 	score = 0
 	$Player.show()
 	$Player.start($startPosition.position)
 	$startTimer.start()
 	$HUD.update_score(score)
+	
 	spawn_mob()
 
 func spawn_mob():
@@ -27,6 +38,7 @@ func spawn_mob():
 	mob.global_position = mob_spawn_location
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
+	enemies.append(mob)
 
 func _on_hud_start_game():
 	new_game()
@@ -40,7 +52,6 @@ func _on_player_eat(tile: TileData) -> void:
 		$HUD.update_score(score)
 
 func _on_player_step_portal(cell: Vector2i) -> void:
-	print("portal")
 	var cells = $Level/TileMapLayer.get_used_cells()
 	var exit_portal_cell = Vector2i.ZERO
 	for c in cells:
